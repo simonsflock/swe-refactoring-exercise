@@ -6,31 +6,37 @@ class Item {
   }
 }
 
-const calculateQualityDifferenceNormalItem = ({ sellIn, quality }) => {
-  const isQualityBiggerThan0 = quality > 0;
-  const areNoMoreDaysToSell = sellIn < 0;
-
-  if (isQualityBiggerThan0 && areNoMoreDaysToSell) return -2;
-  if (isQualityBiggerThan0) return -1;
-
-  return 0;
+const calculateQualityDifferenceNormalItem = item => {
+  switch (true) {
+    case item.quality > 0 && item.sellIn < 0:
+      return -2;
+    case item.quality > 0:
+      return -1;
+    default:
+      return 0;
+  }
 };
 
-const calculateQualityDifferenceBackstagePasses = ({ sellIn, quality }) => {
-  const tenDaysOrLessToSell = sellIn <= 10;
-  const fiveDaysOrLessToSell = sellIn <= 5;
-  const areNoMoreDaysToSell = sellIn < 0;
-
-  if (areNoMoreDaysToSell) return -quality;
-  if (fiveDaysOrLessToSell) return +3;
-  if (tenDaysOrLessToSell) return +2;
-
-  return +1;
+const calculateQualityDifferenceBackstagePasses = item => {
+  switch (true) {
+    case item.sellIn < 0:
+      return -item.quality;
+    case item.sellIn <= 5:
+      return 3;
+    case item.sellIn <= 10:
+      return 2;
+    default:
+      return 1;
+  }
 };
 
-const calculateSellinDifference = ({ sellIn, name }) => {
-  const isSulfuras = name == "Sulfuras, Hand of Ragnaros";
-  return !isSulfuras ? -1 : 0;
+const calculateSellinDifference = item => {
+  switch (item.name) {
+    case "Sulfuras, Hand of Ragnaros":
+      return 0;
+    default:
+      return -1;
+  }
 };
 
 const calculateQualityDifference = item => {
@@ -38,12 +44,11 @@ const calculateQualityDifference = item => {
     case "Sulfuras, Hand of Ragnaros":
       return 0;
     case "Aged Brie":
-        return (item.quality < 50) ? 1 : 0;
-    case  "Backstage passes to a TAFKAL80ETC concert":
+      return (item.quality < 50) ? 1 : 0;
+    case "Backstage passes to a TAFKAL80ETC concert":
       return calculateQualityDifferenceBackstagePasses(item);
     default:
       return calculateQualityDifferenceNormalItem(item);
-
   }
 };
 
@@ -53,22 +58,15 @@ class Shop {
   }
 
   updateQuality() {
-    return this.items.map(item => {
+    this.items.forEach(item => {
       item.sellIn += calculateSellinDifference(item);
       item.quality += calculateQualityDifference(item);
-
-      return item;
     });
+    return this.items;
   }
 }
-  
 
 module.exports = {
   Item,
-  Shop,
-  calculateQualityDifferenceNormalItem,
-  calculateQualityDifference,
-  calculateSellinDifference,
-  calculateQualityDifferenceBackstagePasses
-
+  Shop
 }
