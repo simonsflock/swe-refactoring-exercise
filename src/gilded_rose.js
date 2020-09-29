@@ -65,5 +65,10 @@ class Shop {
 
 module.exports = {
   Item,
-  Shop
+  Shop,
+  calculateQualityDifferenceNormalItem,
+  calculateQualityDifference,
+  calculateSellinDifference,
+  calculateQualityDifferenceBackstagePasses
+
 }
