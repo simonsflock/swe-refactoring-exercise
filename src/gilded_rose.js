@@ -1,3 +1,6 @@
+const MAX_QUALITY = 50;
+const MIN_QUALITY = 0;
+
 class Item {
   constructor(name, sellIn, quality) {
     this.name = name;
@@ -5,9 +8,6 @@ class Item {
     this.quality = quality;
   }
 }
-
-const MAX_QUALITY = 50;
-const MIN_QUALITY = 0;
 
 const calculateQualityDifferenceNormalItem = item => {
   switch (true) {
@@ -68,8 +68,6 @@ class Shop {
     return this.items;
   }
 }
-
-//test
 
 module.exports = {
   Item,
