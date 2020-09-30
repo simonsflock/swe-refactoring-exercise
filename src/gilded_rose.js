@@ -6,11 +6,14 @@ class Item {
   }
 }
 
+const MAX_QUALITY = 50;
+const MIN_QUALITY = 0;
+
 const calculateQualityDifferenceNormalItem = item => {
   switch (true) {
-    case item.quality > 0 && item.sellIn < 0:
+    case item.quality > MIN_QUALITY && item.sellIn < 0:
       return -2;
-    case item.quality > 0:
+    case item.quality > MIN_QUALITY:
       return -1;
     default:
       return 0;
@@ -44,7 +47,7 @@ const calculateQualityDifference = item => {
     case "Sulfuras, Hand of Ragnaros":
       return 0;
     case "Aged Brie":
-      return (item.quality < 50) ? 1 : 0;
+      return (item.quality < MAX_QUALITY) ? 1 : 0;
     case "Backstage passes to a TAFKAL80ETC concert":
       return calculateQualityDifferenceBackstagePasses(item);
     default:
