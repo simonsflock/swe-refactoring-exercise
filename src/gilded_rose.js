@@ -69,6 +69,8 @@ class Shop {
   }
 }
 
+//test
+
 module.exports = {
   Item,
   Shop
