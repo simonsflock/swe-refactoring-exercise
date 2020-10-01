@@ -30,7 +30,7 @@ class Item {
     }    
   }
 
-  updateSellIn () {
+  updateSellIn() {
     switch (this.name) {
       case "Sulfuras, Hand of Ragnaros":
         break;
@@ -43,7 +43,6 @@ class Item {
 }
 
 const updateQualityForBackstageItem = item => {
-
   switch (true) {
     case item.sellIn < 0:
       item.increaseQuality(-item.quality);

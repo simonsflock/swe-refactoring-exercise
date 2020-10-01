@@ -1,33 +1,5 @@
 var {Shop, Item} = require('../src/gilded_rose.js');
-describe("Gilded Rose logic tests", function() {
-
-  it("console results test", () => {
-    const storeItems = [
-      new Item("+5 Dexterity Vest", 10, 20),
-      new Item("Aged Brie", 2, 0),
-      new Item("Elixir of the Mongoose", 5, 7),
-      new Item("Sulfuras, Hand of Ragnaros", 0, 80),
-      new Item("Sulfuras, Hand of Ragnaros", -1, 80),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
-      new Item("Conjured Mana Cake", 3, 6)
-    ];
-    const expectedResult = [
-      new Item("+5 Dexterity Vest", 9, 19),
-      new Item("Aged Brie", 1, 1),
-      new Item("Elixir of the Mongoose", 4, 6),
-      new Item("Sulfuras, Hand of Ragnaros", 0, 80),
-      new Item("Sulfuras, Hand of Ragnaros", -1, 80),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 14, 21),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 9, 50),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 4, 50),
-      new Item("Conjured Mana Cake", 2, 5)
-    ];
-    const shop = new Shop(storeItems);
-
-    expect(shop.updateQuality()).toEqual(expectedResult);
-  });
+describe("Gilded Rose shop tests", function() {
 
   it("When sell by date has passed quality should degrade twice as fast", () => {
     const storeItems = [new Item("normal store item", -1, 10)];
@@ -71,7 +43,7 @@ describe("Gilded Rose logic tests", function() {
     expect(shop.updateQuality()).toEqual(expectedUpdatedItems);
   });
 
-  it("increases in Quality as it's SellIn value approaches", () => {
+  it("Increase quality by 1 when sellin", () => {
     const storeItems = [new Item("Backstage passes to a TAFKAL80ETC concert", 33, 40)];
     const expectedUpdatedItems = [new Item("Backstage passes to a TAFKAL80ETC concert", 32, 41)];
     const shop = new Shop(storeItems);
@@ -112,4 +84,25 @@ describe("Gilded Rose logic tests", function() {
     const shop = new Shop(storeItems);
     expect(shop.updateQuality()).toEqual(expectedUpdatedItems);
   });
+
+
+
+});
+
+describe("Gilded Rose item class tests", function() {
+
+  it("Sellin for Sulfuras, Hand of Ragnaros should always stay the same", () => {
+    const item = new Item("Sulfuras, Hand of Ragnaros", 20, 20);
+    item.updateSellIn()
+    const expectedItem = new Item("Sulfuras, Hand of Ragnaros", 20, 20);
+    expect(item).toEqual(expectedItem);
+  });
+
+  it("Sellin for normal items should decrease by 1 ", () => {
+    const item = new Item("normal item", 20, 20);
+    item.updateSellIn()
+    const expectedItem = new Item("normal item", 19, 20);
+    expect(item).toEqual(expectedItem);
+  });
+
 });
