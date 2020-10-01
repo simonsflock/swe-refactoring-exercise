@@ -20,8 +20,8 @@ describe("Gilded Rose logic tests", function() {
       new Item("Sulfuras, Hand of Ragnaros", 0, 80),
       new Item("Sulfuras, Hand of Ragnaros", -1, 80),
       new Item("Backstage passes to a TAFKAL80ETC concert", 14, 21),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 9, 51),
-      new Item("Backstage passes to a TAFKAL80ETC concert", 4, 52),
+      new Item("Backstage passes to a TAFKAL80ETC concert", 9, 50),
+      new Item("Backstage passes to a TAFKAL80ETC concert", 4, 50),
       new Item("Conjured Mana Cake", 2, 5)
     ];
     const shop = new Shop(storeItems);
@@ -52,9 +52,9 @@ describe("Gilded Rose logic tests", function() {
 
   it("Items can not have a quality more than 50", () => {
     const storeItems = [new Item("normal store item", 33, 70)];
-    const expectedUpdatedItems = [new Item("normal store item", 32, 69)]; // to be fixed
+    const expectedStoredItems = [new Item("normal store item", 33, 50)];
     const shop = new Shop(storeItems);
-    expect(shop.updateQuality()).toEqual(expectedUpdatedItems);
+    expect(shop.items).toEqual(expectedStoredItems);
   });
 
   it("Aged Brie should not increase quality to over 50", () => {

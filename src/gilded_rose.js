@@ -1,57 +1,61 @@
-const MAX_QUALITY = 50;
-const MIN_QUALITY = 0;
+
 
 class Item {
+
   constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
-    this.quality = quality;
+    this.quality = 0;
+    this.increaseQuality(quality);
   }
+
+  static get MAX_QUALITY() {
+    return 50;
+  }
+
+  static get MIN_QUALITY() {
+    return 0;
+  }
+
+  increaseQuality(increase) {
+    switch(true) {
+      case (this.quality + increase) >= Item.MAX_QUALITY:
+        this.quality = Item.MAX_QUALITY;
+        return;
+      case (this.quality + increase) <= Item.MIN_QUALITY:
+        this.quality = Item.MIN_QUALITY;
+        return;
+      default:
+        this.quality  += increase;
+    }    
+  }
+
+  updateSellIn () {
+    switch (this.name) {
+      case "Sulfuras, Hand of Ragnaros":
+        break;
+      default:
+        this.sellIn--;
+    }
+  }
+
+
 }
 
-const calculateQualityDifferenceNormalItem = item => {
-  switch (true) {
-    case item.quality > MIN_QUALITY && item.sellIn < 0:
-      return -2;
-    case item.quality > MIN_QUALITY:
-      return -1;
-    default:
-      return 0;
-  }
-};
+const updateQualityForBackstageItem = item => {
 
-const calculateQualityDifferenceBackstagePasses = item => {
   switch (true) {
     case item.sellIn < 0:
-      return -item.quality;
+      item.increaseQuality(-item.quality);
+      break;
     case item.sellIn <= 5:
-      return 3;
+      item.increaseQuality(3);
+      break;
     case item.sellIn <= 10:
-      return 2;
+      item.increaseQuality(2);
+      break;
     default:
-      return 1;
-  }
-};
-
-const calculateSellinDifference = item => {
-  switch (item.name) {
-    case "Sulfuras, Hand of Ragnaros":
-      return 0;
-    default:
-      return -1;
-  }
-};
-
-const calculateQualityDifference = item => {
-  switch (item.name) {
-    case "Sulfuras, Hand of Ragnaros":
-      return 0;
-    case "Aged Brie":
-      return (item.quality < MAX_QUALITY) ? 1 : 0;
-    case "Backstage passes to a TAFKAL80ETC concert":
-      return calculateQualityDifferenceBackstagePasses(item);
-    default:
-      return calculateQualityDifferenceNormalItem(item);
+      item.increaseQuality(1);
   }
 };
 
@@ -62,8 +66,21 @@ class Shop {
 
   updateQuality() {
     this.items.forEach(item => {
-      item.sellIn += calculateSellinDifference(item);
-      item.quality += calculateQualityDifference(item);
+
+      item.updateSellIn();
+      
+      switch (item.name) {
+        case "Sulfuras, Hand of Ragnaros":
+          break;
+        case "Aged Brie":
+           item.increaseQuality(1);
+           break;
+        case "Backstage passes to a TAFKAL80ETC concert":
+          updateQualityForBackstageItem(item);
+          break;
+        default:
+          (item.sellIn < 0) ? item.increaseQuality(-2) : item.increaseQuality(-1);
+      }
     });
     return this.items;
   }
